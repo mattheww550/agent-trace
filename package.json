@@ -1,0 +1,21 @@
+{
+  "name": "agent-trace",
+  "version": "0.1.0",
+  "description": "Parse, summarise and replay agent tool-call traces stored as JSONL",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": { "agent-trace": "dist/cli.js" },
+  "files": ["dist", "README.md", "LICENSE"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test test/*.test.ts"
+  },
+  "keywords": ["agent", "trace", "jsonl", "observability", "llm", "cli"],
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "@types/node": "^22.10.2"
+  },
+  "license": "MIT"
+}

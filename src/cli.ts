@@ -30,7 +30,7 @@ function readVersion(): string {
   return pkg.version;
 }
 
-interface Options {
+export interface Options {
   command: 'stats' | 'show';
   file: string;
   json: boolean;
@@ -40,9 +40,9 @@ interface Options {
   strict: boolean;
 }
 
-type ParsedArgs = { ok: true; options: Options } | { ok: false; message: string };
+export type ParsedArgs = { ok: true; options: Options } | { ok: false; message: string };
 
-function parseArgs(argv: string[]): ParsedArgs {
+export function parseArgs(argv: string[]): ParsedArgs {
   const [command, ...rest] = argv;
   if (command !== 'stats' && command !== 'show') {
     return { ok: false, message: `unknown command "${command ?? ''}"` };
@@ -85,7 +85,7 @@ function readTrace(file: string): string {
   return file === '-' ? readFileSync(0, 'utf8') : readFileSync(file, 'utf8');
 }
 
-function run(argv: string[]): number {
+export function run(argv: string[]): number {
   if (argv.length === 0 || argv[0] === '-h' || argv[0] === '--help') {
     console.log(USAGE);
     return 0;
@@ -139,4 +139,9 @@ function run(argv: string[]): number {
   return 0;
 }
 
-process.exitCode = run(process.argv.slice(2));
+// Guard so importing this module (e.g. from tests) doesn't run the CLI
+// against the importing process's own argv.
+const isMain = process.argv[1] !== undefined && fileURLToPath(import.meta.url) === process.argv[1];
+if (isMain) {
+  process.exitCode = run(process.argv.slice(2));
+}
